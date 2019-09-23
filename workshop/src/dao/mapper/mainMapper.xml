@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org.//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.IMainDao">
+	<sql id="teamname">
+		<choose>
+			<when test="teamname != null">
+				#{teamname}
+			</when>
+			<otherwise>
+				null
+			</otherwise>
+		</choose>
+	</sql>
+	<select id="selectOneMember" parameterType="String" resultType="member">
+		select * from member where id = #{id}
+	</select>
+	<select id="selectByPhone" parameterType="int" resultType="member">
+		select * from member where phone = #{phone}
+	</select>
+	<insert id="insertMember" parameterType="member">
+		insert into member values(#{id},#{pw},#{name},#{phone},
+		#{address},#{position},#{profile},<include refid="teamname"/>)
+	</insert>
+	<select id="selectMatchingBoard" resultType="reserve">
+		select * from reserve where accept ='true' and away is not null
+	</select>
+	<select id="selectReserveBoard" resultType="reserve">
+		select * from reserve where accept ='false' order by rid
+	</select>
+	<select id="selectOneTeamByStatusId" parameterType="String" resultType="team">
+		select * from team where status_id = #{status_id}
+	</select>
+	<select id="selectOneTeamByTeamname" parameterType="String" resultType="team">
+		select * from team where teamname = #{teamname}
+	</select>
+	<select id="selectAllRecruitBoard" resultType="recruit">
+		select * from recruit
+	</select>
+	<delete id="deleteRecruit" parameterType="int">
+		delete from recruit where eid = #{eid}
+	</delete>
+	<!-- select * from team where teamname = ? -->
+	<update id="updateMemberSetTeamName" parameterType="member">
+		update member set teamname = #{teamname} where id = #{id}
+	</update>
+	<insert id="insertTeam" parameterType="team">
+		insert into team values(#{teamname},#{teamloc},default,#{teamoutlook},#{status_id})
+	</insert>
+	<select id="selectOneRecruitByTeamName" parameterType="String" resultType="recruit">
+		select * from recruit where teamname = #{teamname}
+	</select>
+	<insert id="insertRecruit" parameterType="recruit">
+		insert into recruit values(eid_seq.nextval, #{teamname},#{title},#{count},default,default)
+	</insert>
+	<update id="updateTeam" parameterType="team">
+		update team set teamloc = #{teamloc}, teamoutlook = #{teamoutlook} where teamname = #{teamname}
+	</update>
+	<delete id="deleteTeam" parameterType="String">
+		delete from team where teamname = #{teamname}
+	</delete>
+	<select id="selectOneRecruit" resultType="recruit" parameterType="int">
+		select * from recruit where eid = #{eid}
+	</select>
+	<update id="updateRecruitReadcountUp" parameterType="int">
+		update recruit set readcount = readcount+1 where eid = #{eid}
+	</update>
+	<update id="updateReserveReadcountUp" parameterType="int">
+		update reserve set readcount = readcount+1 where rid = #{rid}
+	</update>
+	<update id="updateRecruitcountMinus" parameterType="int">
+		update recruit set count = count -1 where eid = #{eid}
+	</update>
+	<update id="updateTeamcountPlus" parameterType="String">
+		update team set teamcount=teamcount+1 where teamname = #{teamname}
+	</update>
+	<update id="updateTeamcountMinus" parameterType="String">
+		update team set teamcount = teamcount-1 where teamname = #{teamname}
+	</update>
+	<update id="updateRecruit" parameterType="recruit">
+		update recruit set count= #{count}, title = #{title} where eid = #{eid}
+	</update>
+	<update id="updateTeamName" parameterType="String">
+		update member set teamname = null where id = #{id}
+	</update>
+	<select id="selectOneReserve" parameterType="int" resultType="reserve">
+		select * from reserve where rid = #{rid}
+	</select>
+	<select id="selectOneLeaderByTeamname" parameterType="String" resultType="String">
+		select status_id from team where teamname = #{teamname}
+	</select>
+	<select id="selectOneUseTimeByUseTime" parameterType="String" resultType="reserve">
+		select * from reserve where usetime = #{usetime}
+	</select>
+	<insert id="insertReserve" parameterType="reserve">
+		insert into reserve values(rid_seq.nextval,#{title},#{teamname},#{stadium},#{levels},#{usetime},#{fee},default,default,null,'false')
+	</insert>
+	<delete id="deleteMember" parameterType="String">
+		delete from member where id = #{id}
+	</delete>
+	<update id="updateMember" parameterType="member">
+		update member set name=#{name}, phone=#{phone}, address=#{address} ,position=#{position}, profile =#{profile} where id =#{id}
+	</update>
+</mapper>

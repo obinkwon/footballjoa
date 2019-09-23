@@ -108,4 +108,7 @@
 	<update id="updateAcceptCondition" parameterType="reserve">
 		update reserve set away = #{away} where rid = #{rid}
 	</update>
+	<delete id="deleteReserve" parameterType="int">
+		delete from reserve where rid = #{rid}
+	</delete>
 </mapper>

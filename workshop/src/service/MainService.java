@@ -256,7 +256,9 @@ public class MainService {
 		r.setRid(rid);
 		dao.updateAcceptCondition(r);
 	}
-	
+	public void deleteReserve(int rid) {
+		dao.deleteReserve(rid);
+	}
 	
 	
 	

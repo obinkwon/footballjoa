@@ -684,27 +684,25 @@ public class MainController {
 		return null;
 	}
 	@RequestMapping("reserveDelete.do")
-	public String reserveDelete(Member member,HttpServletResponse resp) throws IOException{
-		resp.setContentType("text/html; charset=UTF-8");
-		PrintWriter p = resp.getWriter();
-		HashMap<String, Object> map = service.registCheck(member.getId(), member.getPhone());
-		if(map.get("phone")==null) {//전화번호가 중복 안될때
-			service.memberUpdate(member);
-			String str="";
-			str = "<script language='javascript'>"; 
-			str += "alert('수정 되었습니다');";
-			str += "location.href = 'memberInfoForm.do'";   
-			str += "</script>";
-			p.print(str);	
+	public ModelAndView reserveDelete(int rid, String id) throws IOException{
+		ModelAndView mav = new ModelAndView();
+		//팀정보에 가져옴
+		HashMap<String, Object> map = service.teamMatchSelectForm(rid);
+		Reserve r = (Reserve)map.get("r");
+		Team t = (Team)map.get("t");
+//		System.out.println("----------------------------------------");
+//		System.out.println("세션아이디 팀이름 확인" + dao.checkTeamBoss(id) );
+//		System.out.println("팀이름" + dao.checkTeamBoss(id) );
+		
+		//rid로 가져온 상세정보의 팀 이름과 , 세션아이디와 비교한 팀 이름이 같을때 =글쓴이일때
+		if(t.getStatus_id().equals(id)){
+			service.deleteReserve(rid);
+			mav.setViewName("redirect:reserveForm.do");
 		}
 		else {
-			String str="";
-			str = "<script language='javascript'>"; 
-			str += "alert('해당 전화번호는 사용하실수 없습니다.');";
-			str += "history.go(-1)";  
-			str += "</script>";
-			p.print(str);	
+			mav.addObject("rid",rid);
+			mav.setViewName("redirect:reserveInfo.do");
 		}
-		return null;
+		return mav;
 	}
 }

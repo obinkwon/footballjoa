@@ -31,6 +31,7 @@ public interface IMainDao {
 	public void deleteRecruit(int eid);
 	public void deleteTeam(String teamname);
 	public void deleteMember(String id);
+	public void deleteReserve(int rid);
 	//update
 	public void updateMemberSetTeamName(Member member);
 	public void updateTeam(Team team);
@@ -52,7 +53,6 @@ public interface IMainDao {
 	public String moveRegistFormByTeam(String id);
 	public void insertReserveRegistForm(Reserve reserve);
 	public void updateReserveUpdateFrom(Reserve reserve);
-	public void deleteReserveRegistFrom(int rid);
 	public String MatchconditionCompareTeamname(String session_id);
 	public String MatchconditionFirst(String session_id);
 	public void updateWaitingAcceptCondition(String session_id, int rid);

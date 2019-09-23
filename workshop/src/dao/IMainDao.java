@@ -26,6 +26,7 @@ public interface IMainDao {
 	public Recruit selectOneRecruitByTeamName(String teamname);
 	public Reserve selectOneReserve(int rid);
 	public String selectOneUseTimeByUseTime(String usetime);
+	public String matchConditionCheck(int rid);
 	//delete
 	public void deleteRecruit(int eid);
 	public void deleteTeam(String teamname);
@@ -40,10 +41,12 @@ public interface IMainDao {
 	public void updateTeamcountMinus(String teamname);
 	public void updateTeamName(String id);
 	public void updateMember(Member member);
+	public void updateAcceptCondition(Reserve r);
 	
 	
 	
 	
+	/////
 	public void updateRenewPw(String pw, String id);
 	public String checkPasswordById(String id);
 	public String moveRegistFormByTeam(String id);
@@ -52,7 +55,6 @@ public interface IMainDao {
 	public void deleteReserveRegistFrom(int rid);
 	public String MatchconditionCompareTeamname(String session_id);
 	public String MatchconditionFirst(String session_id);
-	public String MatchconditionSecond(int rid);
 	public void updateWaitingAcceptCondition(String session_id, int rid);
 	public Team selectTeambyAway(String get_away);
 	public String checkTeamBySessionId(String session_id);

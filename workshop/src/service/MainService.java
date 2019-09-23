@@ -48,7 +48,7 @@ public class MainService {
 		return map;
 	}
 	
-	public void registMember(Member member) {
+	public void registMember(Member member) {//회원등록
 		dao.insertMember(member);
 	}
 	
@@ -72,13 +72,14 @@ public class MainService {
 		return new File(prepath + fileName);
 	}
 	
-	public List<Reserve> getReserveList() {
+	public List<Reserve> getReserveList() {//예약 리스트 가져오기
 		return dao.selectReserveBoard();
 	}
 	
-	public List<Reserve> getMatchingList() {
+	public List<Reserve> getMatchingList() {//매칭 리스트 가져오기
 		return dao.selectMatchingBoard();
 	}
+	
 	public HashMap<String, Object> checkTeamInfo(String session_id) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		Member member = dao.selectOneMember(session_id);
@@ -133,7 +134,7 @@ public class MainService {
 		dao.insertRecruit(recruit);
 	}
 	
-	public Team teamUpdateCheck(String status_id, String session_id) {
+	public Team teamUpdateCheck(String status_id, String session_id) {//팀정보 수정시 팀장 여부 체크
 		Team team = dao.selectOneTeamByStatusId(session_id);
 		if(status_id.equals(team.getStatus_id())) return team; //팀장인 경우
 		else return null;
@@ -243,6 +244,19 @@ public class MainService {
 	public void memberUpdate(Member member) {
 		dao.updateMember(member);
 	}
+	public Team getTeamInfo(String id) {
+		return dao.selectOneTeamByStatusId(id);
+	}
+	public String matchCheck(int rid) {
+		return dao.matchConditionCheck(rid);
+	}
+	public void matchAccept(String away_teamname, int rid) {
+		Reserve r = new Reserve();
+		r.setAway(away_teamname);
+		r.setRid(rid);
+		dao.updateAcceptCondition(r);
+	}
+	
 	
 	
 	

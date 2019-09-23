@@ -102,4 +102,10 @@
 	<update id="updateMember" parameterType="member">
 		update member set name=#{name}, phone=#{phone}, address=#{address} ,position=#{position}, profile =#{profile} where id =#{id}
 	</update>
+	<select id="matchConditionCheck" parameterType="int" resultType="String">
+		select away from reserve where accept = 'false' and rid = #{rid}
+	</select>
+	<update id="updateAcceptCondition" parameterType="reserve">
+		update reserve set away = #{away} where rid = #{rid}
+	</update>
 </mapper>

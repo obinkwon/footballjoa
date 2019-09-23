@@ -40,7 +40,7 @@
 		line-height : 20px;
 	}
 	table.info{
-		margin-left : 19%;
+		margin : auto;
 	}
 	td{
 		text-align : left;
@@ -58,10 +58,6 @@
 </style>
 </head>
 <body>
-<%
-	Reserve r = (Reserve)request.getAttribute("Reserve");
-	Team t = (Team)request.getAttribute("Team");
-%>
 <jsp:include page="header.jsp"/>
 	<div class="main">
 	<h2 class="title">상대팀 정보</h2>
@@ -74,25 +70,24 @@
 		</script>
 	</form>
 	<form action="teamMatchSelect.do" method="post">
-	<input type="hidden" name="id" value="<%= session.getAttribute("session_id")%>">
-	<input type="hidden" name="rid" value="<%= r.getRid() %>">
+	<input type="hidden" name="rid" value="${Reserve.rid}">
 		<table class="info">
 			<tr>
 				<td>팀 이름</td>
-				<td><input type="text" name="teamname" class="text" value="<%= t.getTeamname()%>" readonly></td>
+				<td><input type="text" name="teamname" class="text" value="${Team.teamname}" readonly></td>
 				<td rowspan="4"><img class="info" src="teamImg.png"></td>
 			</tr>
 			<tr>
 				<td>팀 지역</td>
-				<td><input type="text" name="teamloc" class="text" value="<%= t.getTeamloc()%>" readonly></td>
+				<td><input type="text" name="teamloc" class="text" value="${Team.teamloc}" readonly></td>
 			</tr>
 			<tr>
 				<td>팀 회원수</td>
-				<td><input type="text" name="teamcount" class="text" value="<%= t.getTeamcount()%>" readonly></td>
+				<td><input type="text" name="teamcount" class="text" value="${Team.teamcount}" readonly></td>
 			</tr>
 			<tr>
 				<td>팀 소개</td>
-				<td><input type="text" name="teamoutlook" class="text_pre" value="<%= t.getTeamoutlook()%>" readonly></td>
+				<td><input type="text" name="teamoutlook" class="text_pre" value="${Team.teamoutlook}" readonly></td>
 			</tr>
 		</table><br>
 		<input class="btn" type="submit" value="매칭">

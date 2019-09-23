@@ -498,13 +498,51 @@ public class MainController {
 	}
 	
 	@RequestMapping("teamMatchSelect.do")
-	public ModelAndView teamMatchSelect(int rid) throws IOException{
-		ModelAndView mav = new ModelAndView();
+	public ModelAndView teamMatchSelect(int rid, HttpServletResponse resp,HttpSession session) throws IOException{
+		String id = (String)session.getAttribute("session_id");
+		resp.setContentType("text/html; charset=UTF-8");
+		PrintWriter p = resp.getWriter();
+		String str="";
 		HashMap<String, Object> map = service.teamMatchSelectForm(rid);
-		mav.addObject("Reserve", (Reserve)map.get("r"));
-		mav.addObject("Team", (Team)map.get("t"));
-		mav.setViewName("teamMatchSelect");
-		return mav;
+		Reserve r = (Reserve)map.get("r");// 홈팀 게시글 정보
+		
+		//현재 접속자가 팀장이여야 하며, 매칭할 홈팀의 수락여부가 false일경우 
+		if(service.getTeamInfo(id)!=null) { //팀장인 경우(팀이 없는 경우)
+			String away_teamname = service.getTeamInfo(id).getTeamname(); // 접속한 사용자 팀이름
+			if(!r.getTeamname().equals(away_teamname)){ //본인 팀과 매칭할 경우
+				if(service.matchCheck(rid)==null) { //매칭수락상태가 false인 상대만
+					service.matchAccept(away_teamname, rid);
+					str = "<script language='javascript'>"; 
+					str += "alert('매칭에 성공하였습니다 상대방 팀장이 수락시 성사됩니다 .');";
+					str += "location.href='reserveForm.do'"; 
+					str += "</script>";
+					p.print(str);	
+					return null;
+				}
+				else {
+					str = "<script language='javascript'>"; 
+					str += "alert('매칭 대기중입니다.');";
+					str += "history.go(-1);";
+					str += "</script>";
+					p.print(str);	
+					return null;
+				}
+			}else {
+				str = "<script language='javascript'>"; 
+				str += "alert('본인 팀과 매칭을 할 수 없습니다.');";
+				str += "history.go(-1);"; 
+				str += "</script>";
+				p.print(str);	
+				return null;
+			}
+		}else {//팀장이 아닌경우
+			str = "<script language='javascript'>"; 
+			str += "alert('당신은 팀장이 아닙니다');";
+			str += "history.go(-1);";
+			str += "</script>";
+			p.print(str);	
+			return null;
+		}
 	}
 	
 	@RequestMapping("reserveInsertForm.do")
@@ -623,6 +661,30 @@ public class MainController {
 	
 	@RequestMapping("memberInfoUpdate.do")
 	public String memberInfoUpdate(Member member,HttpServletResponse resp) throws IOException{
+		resp.setContentType("text/html; charset=UTF-8");
+		PrintWriter p = resp.getWriter();
+		HashMap<String, Object> map = service.registCheck(member.getId(), member.getPhone());
+		if(map.get("phone")==null) {//전화번호가 중복 안될때
+			service.memberUpdate(member);
+			String str="";
+			str = "<script language='javascript'>"; 
+			str += "alert('수정 되었습니다');";
+			str += "location.href = 'memberInfoForm.do'";   
+			str += "</script>";
+			p.print(str);	
+		}
+		else {
+			String str="";
+			str = "<script language='javascript'>"; 
+			str += "alert('해당 전화번호는 사용하실수 없습니다.');";
+			str += "history.go(-1)";  
+			str += "</script>";
+			p.print(str);	
+		}
+		return null;
+	}
+	@RequestMapping("reserveDelete.do")
+	public String reserveDelete(Member member,HttpServletResponse resp) throws IOException{
 		resp.setContentType("text/html; charset=UTF-8");
 		PrintWriter p = resp.getWriter();
 		HashMap<String, Object> map = service.registCheck(member.getId(), member.getPhone());

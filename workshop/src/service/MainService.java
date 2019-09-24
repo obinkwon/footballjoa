@@ -259,6 +259,9 @@ public class MainService {
 	public void deleteReserve(int rid) {
 		dao.deleteReserve(rid);
 	}
+	public Team getTeamByTeamname(String teamname) {
+		return dao.selectOneTeamByTeamname(teamname);
+	}
 	
 	
 	

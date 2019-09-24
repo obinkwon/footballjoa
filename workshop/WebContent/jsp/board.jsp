@@ -10,7 +10,7 @@
 <script type="text/javascript" src="js/board.js"></script>
 <script type="text/javascript">
 	function acceptForm(rid){
-		var x=open_team('MainServlet?command=teamMatchAcceptForm&rid='+rid+'&id=${ session_id }','accept');
+		var x=open_team('teamMatchAcceptForm.do?rid='+rid+'&id=${ session_id }','accept');
 		x.moveTo(170,100);
 	}
 </script>

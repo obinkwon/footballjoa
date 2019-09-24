@@ -690,10 +690,6 @@ public class MainController {
 		HashMap<String, Object> map = service.teamMatchSelectForm(rid);
 		Reserve r = (Reserve)map.get("r");
 		Team t = (Team)map.get("t");
-//		System.out.println("----------------------------------------");
-//		System.out.println("세션아이디 팀이름 확인" + dao.checkTeamBoss(id) );
-//		System.out.println("팀이름" + dao.checkTeamBoss(id) );
-		
 		//rid로 가져온 상세정보의 팀 이름과 , 세션아이디와 비교한 팀 이름이 같을때 =글쓴이일때
 		if(t.getStatus_id().equals(id)){
 			service.deleteReserve(rid);
@@ -702,6 +698,37 @@ public class MainController {
 		else {
 			mav.addObject("rid",rid);
 			mav.setViewName("redirect:reserveInfo.do");
+		}
+		return mav;
+	}
+	@RequestMapping("teamMatchAcceptForm.do")
+	public ModelAndView teamMatchAcceptForm(int rid, HttpSession session,HttpServletResponse resp) throws IOException{
+		ModelAndView mav = new ModelAndView();
+		String id = (String)session.getAttribute("session_id");
+		
+		HashMap<String, Object> map = service.teamMatchSelectForm(rid);
+		Reserve r = (Reserve)map.get("r");
+		Team team = service.getTeamInfo(id);
+		Team t = (Team)map.get("t");
+		Team away = service.getTeamByTeamname(r.getAway());
+		
+		//조건 (해당 팀의 팀장만 가능함 (session을 넣어 비교))
+		if(team!=null) {
+			if(team.getTeamname().equals(t.getTeamname())) {
+				mav.addObject("r",r);
+				mav.addObject("t", away);
+				mav.setViewName("accept");
+			}
+		}else {
+			resp.setContentType("text/html; charset=UTF-8");
+			PrintWriter p = resp.getWriter();
+			String str="";
+			str = "<script language='javascript'>"; 
+			str += "alert('당신은 팀장이 아닙니다');";
+			str += "window.close();";
+			str += "</script>";
+			p.print(str);
+			return null; 
 		}
 		return mav;
 	}

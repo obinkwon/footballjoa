@@ -60,7 +60,7 @@
 		vertical-align: top;
 	}
 	table.info{
-		margin-left : 19%;
+		margin : auto;
 	}
 	td.right{
 		padding-left : 43px;

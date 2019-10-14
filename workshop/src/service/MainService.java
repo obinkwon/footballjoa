@@ -188,11 +188,7 @@ public class MainService {
 		return team;
 	}
 	
-	public void updateRecruitFrom(int eid, String title, int count) {
-		Recruit recruit = new Recruit();
-		recruit.setEid(eid);
-		recruit.setTitle(title);
-		recruit.setCount(count);
+	public void updateRecruitFrom(Recruit recruit) {
 		dao.updateRecruit(recruit);
 	}
 	
@@ -262,7 +258,24 @@ public class MainService {
 	public Team getTeamByTeamname(String teamname) {
 		return dao.selectOneTeamByTeamname(teamname);
 	}
-	
+	public void acceptMatching(int rid) {
+		dao.updateReserveAccept(rid);
+	}
+	public void rejectMatching(int rid) {
+		dao.updateReserveReject(rid);
+	}
+	public List<Reserve> reserveSearch(String select, String search) {
+		List<Reserve> reserveBoardList = null;
+		HashMap<String, String> param = new HashMap<String, String>();
+		if(select.equals("stadium")) {//구장 별
+			param.put("stadium", search);
+			reserveBoardList = dao.searchByStadium(param);
+		}else if(select.equals("teamname")) {//팀 이름별
+			param.put("teamname", search);
+			reserveBoardList = dao.searchByTeamname(param);
+		}else reserveBoardList = getReserveList();
+		return reserveBoardList;
+	}
 	
 	
 	//이용시간 폼 바꾸기

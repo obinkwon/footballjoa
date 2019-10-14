@@ -427,15 +427,14 @@ public class MainController {
 		ModelAndView mav = new ModelAndView();
 		String session_id = (String)session.getAttribute("session_id");
 		HashMap<String, Object> map = service.teamRecruitInfo(eid);
-		//팀장일 때  or 팀자잉 아닐대
+		//팀장일 때  or 팀장이 아닐때
 		if(session_id.equals(service.teamRecruitUpdate(eid))) {
 			mav.addObject("e", (Recruit)map.get("e"));
 			mav.addObject("t", (Team)map.get("t"));
 			mav.addObject("eid", eid);
 			mav.setViewName("teamRecruitUpdate");
 			return mav;
-		}
-		else {
+		}else {
 			resp.setContentType("text/html; charset=UTF-8");
 			PrintWriter p = resp.getWriter();
 			String str="";
@@ -467,10 +466,10 @@ public class MainController {
 	}
 	
 	@RequestMapping("teamRecruitUpdate.do")
-	public String teamRecruitUpdate(int eid, String title, int count){
+	public String teamRecruitUpdate(Recruit recruit){
 		//해당 정보 업데이트
-		service.updateRecruitFrom(eid, title, count);
-	    return "teamRecruitBoardForm";
+		service.updateRecruitFrom(recruit);
+	    return "redirect:teamRecruitBoardForm.do";
 	}
 	
 	@RequestMapping("teamLeave.do")
@@ -688,7 +687,6 @@ public class MainController {
 		ModelAndView mav = new ModelAndView();
 		//팀정보에 가져옴
 		HashMap<String, Object> map = service.teamMatchSelectForm(rid);
-		Reserve r = (Reserve)map.get("r");
 		Team t = (Team)map.get("t");
 		//rid로 가져온 상세정보의 팀 이름과 , 세션아이디와 비교한 팀 이름이 같을때 =글쓴이일때
 		if(t.getStatus_id().equals(id)){
@@ -711,6 +709,9 @@ public class MainController {
 		Team team = service.getTeamInfo(id);
 		Team t = (Team)map.get("t");
 		Team away = service.getTeamByTeamname(r.getAway());
+		resp.setContentType("text/html; charset=UTF-8");
+		PrintWriter p = resp.getWriter();
+		String str="";
 		
 		//조건 (해당 팀의 팀장만 가능함 (session을 넣어 비교))
 		if(team!=null) {
@@ -718,18 +719,44 @@ public class MainController {
 				mav.addObject("r",r);
 				mav.addObject("t", away);
 				mav.setViewName("accept");
+			}else {
+				str = "<script language='javascript'>"; 
+				str += "alert('수락할 권한이 없습니다');";
+				str += "window.close();";
+				str += "</script>";
+				p.print(str);
+				return null;
 			}
 		}else {
-			resp.setContentType("text/html; charset=UTF-8");
-			PrintWriter p = resp.getWriter();
-			String str="";
 			str = "<script language='javascript'>"; 
-			str += "alert('당신은 팀장이 아닙니다');";
+			str += "alert('수락할 권한이 없습니다');";
 			str += "window.close();";
 			str += "</script>";
 			p.print(str);
 			return null; 
 		}
+		return mav;
+	}
+	@RequestMapping("teamMatchAccept.do")
+	public ModelAndView teamMatchAccept(int rid) throws IOException{
+		ModelAndView mav = new ModelAndView();
+		service.acceptMatching(rid);
+		mav.setViewName("redirect:reserveForm.do");
+		return mav;
+	}
+	@RequestMapping("teamMatchReject.do")
+	public ModelAndView teamMatchReject(int rid) throws IOException{
+		ModelAndView mav = new ModelAndView();
+		service.rejectMatching(rid);
+		mav.setViewName("redirect:reserveForm.do");
+		return mav;
+	}
+	@RequestMapping("teamMatchSearch.do")
+	public ModelAndView teamMatchSearch(@RequestParam(defaultValue = " ")String search, @RequestParam(defaultValue = "all")String select) throws IOException{
+		ModelAndView mav = new ModelAndView();
+		List<Reserve> reserveBoardList = service.reserveSearch(select, search);
+		mav.addObject("reserveBoardList", reserveBoardList);
+		mav.setViewName("teamMatch");
 		return mav;
 	}
 }

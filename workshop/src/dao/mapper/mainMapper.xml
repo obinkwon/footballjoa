@@ -111,4 +111,16 @@
 	<delete id="deleteReserve" parameterType="int">
 		delete from reserve where rid = #{rid}
 	</delete>
+	<update id="updateReserveAccept" parameterType="int">
+		update reserve set accept = 'true' where rid = #{rid}
+	</update>
+	<update id="updateReserveReject" parameterType="int">
+		update reserve set away = null where rid = #{rid}
+	</update>
+	<select id="searchByStadium" parameterType="java.util.HashMap" resultType="reserve">
+		select * from reserve where stadium like '%${stadium}%' and accept ='false' order by stadium
+	</select>
+	<select id="searchByTeamname" parameterType="java.util.HashMap" resultType="reserve">
+		select * from reserve where teamname like '%${teamname}%' and accept ='false' order by teamname
+	</select>
 </mapper>

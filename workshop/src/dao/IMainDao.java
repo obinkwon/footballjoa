@@ -1,5 +1,6 @@
 package dao;
 
+import java.util.HashMap;
 import java.util.List;
 
 import model.Member;
@@ -27,6 +28,8 @@ public interface IMainDao {
 	public Reserve selectOneReserve(int rid);
 	public String selectOneUseTimeByUseTime(String usetime);
 	public String matchConditionCheck(int rid);
+	public List<Reserve> searchByStadium(HashMap<String, String> param);
+	public List<Reserve> searchByTeamname(HashMap<String, String> param);
 	//delete
 	public void deleteRecruit(int eid);
 	public void deleteTeam(String teamname);
@@ -43,6 +46,8 @@ public interface IMainDao {
 	public void updateTeamName(String id);
 	public void updateMember(Member member);
 	public void updateAcceptCondition(Reserve r);
+	public void updateReserveAccept(int rid);
+	public void updateReserveReject(int rid);
 	
 	
 	
@@ -58,10 +63,6 @@ public interface IMainDao {
 	public void updateWaitingAcceptCondition(String session_id, int rid);
 	public Team selectTeambyAway(String get_away);
 	public String checkTeamBySessionId(String session_id);
-	public void updateAcceptMatchingisOk(int rid);
-	public void updateRejecttMatchingisOk(int rid);
-	public List<Reserve> viewReserveTableByStadium(String input_text);
-	public List<Reserve> viewReserveTableByTeamname(String input_text);
 	public String checkExistTeamInfo(String session_id);
 	public void updateRecruitcountMinus(int req_eid);
 	public String selectTeam_update_delete_Condition(int req_eid);

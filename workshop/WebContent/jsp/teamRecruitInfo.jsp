@@ -60,7 +60,7 @@
 		vertical-align: top;
 	}
 	table.info{
-		margin-left : 19%;
+		margin : auto;
 	}
 	td.right{
 		padding-left : 43px;
@@ -93,7 +93,6 @@
 					location.href='teamJoin.do?eid=${e.eid}&teamname=${e.teamname}';
 			}
 			function update(){
-				alert("모집 정보 수정페이지로 이동합니다");
 				location.href='teamRecruitUpdateForm.do?eid=${e.eid}';
 			}
 			function del(){

@@ -44,7 +44,7 @@
 		$("#btn2").click(function(){
 			var search = $("#search").val();
 			var select = $("#select").val();
-			location.href="MainServlet?command=teamMatchSearch&search="+search+"&select="+select;
+			location.href="teamMatchSearch.do?search="+search+"&select="+select;
 		});
 	});
 </script>

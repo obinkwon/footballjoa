@@ -11,7 +11,6 @@
 <script type="text/javascript">
 	function acceptForm(rid){
 		var x=open_team('teamMatchAcceptForm.do?rid='+rid+'&id=${ session_id }','accept');
-		x.moveTo(170,100);
 	}
 </script>
 <style type="text/css">
@@ -76,7 +75,7 @@
 	        
 	      </tbody>
 	    </table>
-	    <input class="btn2" type="button" onclick="location.href='reserveInsertForm.do?id=<%= session.getAttribute("session_id")%>'" value="등록">
+	    <input class="btn2" type="button" onclick="location.href='reserveInsertForm.do?id=${session_id}'" value="등록">
 	</form>
     </div>
     <!-- 매칭현황 테이블 -->

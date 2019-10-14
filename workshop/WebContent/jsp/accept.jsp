@@ -43,7 +43,7 @@
 		border: 0px solid #d9d9d9;
 	}
 	table.info{
-		margin-left : 19%;
+		margin : auto;
 	}
 	td.right{
 		padding-left : 43px;
@@ -59,12 +59,7 @@
 <body>
 
 	<form>
-		<script type="text/javascript">
-		var team = "<%=request.getAttribute("team")%>";
-		this.moveTo(170,100);
-		
-		</script>
-		<div class="main">
+	<div class="main">
 	<h2 class="title">상대팀 정보</h2>
 	<hr>
 	</div>
@@ -72,7 +67,7 @@
 			function after(){
 				var x = confirm("수락하시겠습니까?");
 				if(x==true){
-					window.opener.parent.location.href='MainServlet?command=teamMatchAccept&rid=${r.rid}';
+					window.opener.parent.location.href='teamMatchAccept.do?rid=${r.rid}';
 					window.close();
 				}
 			}
@@ -82,16 +77,13 @@
 			function reject(){
 				var x = confirm("거부 하시겠습니까?");
 				if(x==true){
-					window.opener.parent.location.href='MainServlet?command=teamMatchReject&rid=${r.rid}';
+					window.opener.parent.location.href='teamMatchReject.do?rid=${r.rid}';
 					window.close();
 				}
 			}
 		</script>
 	</form>
-	<form action="MainServlet" method="post">
-	<input type="hidden" name="command" value="memberInfoUpdateForm">
-	
-	
+	<form>
 		<table class="info">
 			<tr>
 				<td>팀 이름</td>

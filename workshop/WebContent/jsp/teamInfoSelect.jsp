@@ -59,7 +59,7 @@
 		resize: none;
 	}
 	table.info{
-		margin-left : 19%;
+		margin : auto;
 	}
 	td{
 		text-align : left;
